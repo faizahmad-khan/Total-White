@@ -2,6 +2,16 @@
 
 A stealth-based puzzle game built with Pygame where players must navigate through enemy territory while avoiding detection by changing their shape to blend in with the environment.
 
+# Camouflage: Stealth Game
+
+
+
+[![Play on itch.io](https://img.shields.io/badge/Play_on-itch.io-fa5c5c?style=for-the-badge&logo=itch.io&logoColor=white)](https://cypher0101.itch.io/camouflage-stealth)
+
+
+
+A stealth puzzle game built with Python. Avoid the guards, shift shapes, and escape!
+
 ## Table of Contents
 - [Game Overview](#game-overview)
 - [How to Play](#how-to-play)
