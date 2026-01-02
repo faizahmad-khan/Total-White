@@ -24,6 +24,19 @@ A stealth puzzle game built with Python. Avoid the guards, shift shapes, and esc
 
 In Camouflage, you play as a stealth agent trying to reach the safe zone without being detected by patrolling enemies. The unique twist is that you can change your shape to blend in with designated hiding spots, making you invisible to enemy vision cones when you match the shape of your surroundings.
 
+## Game Screenshots
+
+Here are screenshots showing what you'll play in Camouflage:
+
+![Level 1 Screenshot](build/web-cache/38e02d124325c756243ee99a92e528ed.png)
+*Level 1: Player (black square) hiding from enemy patrols (red triangles) using hiding spots*
+
+![Level 2 Screenshot](images/level2.png)
+*Level 2: Player changing shape to match hiding spots*
+
+![Level 3 Screenshot](images/level3.png)
+*Level 3: Navigating through enemy vision cones to reach the goal*
+
 ## How to Play
 
 1. Navigate your character (a black square or circle) using arrow keys
