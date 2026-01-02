@@ -28,14 +28,14 @@ In Camouflage, you play as a stealth agent trying to reach the safe zone without
 
 Here are screenshots showing what you'll play in Camouflage:
 
-![Level 1 Screenshot](build/web-cache/38e02d124325c756243ee99a92e528ed.png)
-*Level 1: Player (black square) hiding from enemy patrols (red triangles) using hiding spots*
+![Camouflage Gameplay Screenshot 1](images/Screenshot%202026-01-02%20at%2010.59.46%E2%80%AFPM.png)
+*Screenshot 1: Player avoiding enemy patrols*
 
-![Level 2 Screenshot](images/level2.png)
-*Level 2: Player changing shape to match hiding spots*
+![Camouflage Gameplay Screenshot 2](images/Screenshot%202026-01-02%20at%2010.59.57%E2%80%AFPM.png)
+*Screenshot 2: Player changing shape to match environment*
 
-![Level 3 Screenshot](images/level3.png)
-*Level 3: Navigating through enemy vision cones to reach the goal*
+![Camouflage Gameplay Screenshot 3](images/Screenshot%202026-01-02%20at%2011.00.45%E2%80%AFPM.png)
+*Screenshot 3: Player navigating to the goal zone*
 
 ## How to Play
 
