@@ -2,21 +2,15 @@
 
 A stealth-based puzzle game built with Pygame where players must navigate through enemy territory while avoiding detection by changing their shape to blend in with the environment.
 
-# Camouflage: Stealth Game
-
-
-
 [![Play on itch.io](https://img.shields.io/badge/Play_on-itch.io-fa5c5c?style=for-the-badge&logo=itch.io&logoColor=white)](https://cypher0101.itch.io/camouflage-stealth)
-
-
-
-A stealth puzzle game built with Python. Avoid the guards, shift shapes, and escape!
 
 ## Table of Contents
 - [Game Overview](#game-overview)
+- [Features](#features)
 - [How to Play](#how-to-play)
 - [Game Mechanics](#game-mechanics)
 - [Controls](#controls)
+- [Scoring System](#scoring-system)
 - [Requirements](#requirements)
 - [Installation](#installation)
 
@@ -24,9 +18,20 @@ A stealth puzzle game built with Python. Avoid the guards, shift shapes, and esc
 
 In Camouflage, you play as a stealth agent trying to reach the safe zone without being detected by patrolling enemies. The unique twist is that you can change your shape to blend in with designated hiding spots, making you invisible to enemy vision cones when you match the shape of your surroundings.
 
-## Game Screenshots
+## Features
 
-Here are screenshots showing what you'll play in Camouflage:
+- **5 Unique Levels** — Each with a distinct name, layout, and escalating difficulty
+- **Wall Obstacles** — Maze-like structures that block movement and force strategic routing
+- **Multiple Enemies Per Level** — Up to 3 guards patrolling simultaneously
+- **Shape-Shifting Camouflage** — Morph into squares or circles to blend with hiding spots
+- **Sprint & Stamina System** — Burst of speed at the cost of energy
+- **Decoy Deployment** — Throw distractions to lure enemies away
+- **Teleporters** — Portal pairs for cross-map movement
+- **Scoring System** — Performance-based score with S/A/B/C/D ranks
+- **Semi-Transparent Vision Cones** — See exactly where enemies are looking
+- **Web Deployment** — Playable in browser via Pygbag (itch.io)
+
+## Game Screenshots
 
 ![Camouflage Gameplay Screenshot 1](images/Screenshot%202026-01-02%20at%2010.59.46%E2%80%AFPM.png)
 *Screenshot 1: Player avoiding enemy patrols*
@@ -40,24 +45,57 @@ Here are screenshots showing what you'll play in Camouflage:
 ## How to Play
 
 1. Navigate your character (a black square or circle) using arrow keys
-2. Find hiding spots (black outlined squares and circles) scattered around the map
-3. Press the SPACE key when on a hiding spot to change your shape to match it
-4. Stay hidden when enemies are looking in your direction
-5. Reach the green goal zone without being detected to win
-6. Avoid getting caught by the red enemy patrols with vision cones
+2. Collect the **blue diamond key** to unlock the exit
+3. Find hiding spots (outlined squares and circles) scattered around the map
+4. Press **SPACE** when on a hiding spot to change your shape to match it
+5. Avoid the patrolling enemies and their vision cones
+6. Navigate around **walls** — they block your movement!
+7. Use **decoys** (Z key) and **sprint** (SHIFT) strategically
+8. Reach the **green goal zone** (turns green once you have the key)
 
 ## Game Mechanics
 
-- **Shape Matching**: You must match the shape of a hiding spot (square or circle) to become invisible to enemies
-- **Vision Cones**: Enemies have limited fields of vision (shown as red transparent cones) - you'll be detected if you're in an enemy's vision cone while not properly hidden
+- **Shape Matching**: Match the shape of a hiding spot (square or circle) to become invisible to enemies
+- **Vision Cones**: Enemies have semi-transparent vision cones — you'll be detected if you're in one while not properly hidden
 - **Patrol Patterns**: Enemies follow predetermined patrol paths and look in the direction they're moving
-- **Detection**: You'll be caught if you're moving while in an enemy's vision cone OR if you're not in a matching hiding spot when an enemy sees you
+- **Wall Collision**: Walls block both player movement, creating maze-like challenges
+- **Detection**: You'll be caught if you're moving in a vision cone OR not in a matching hiding spot
+- **Multiple Enemies**: Later levels feature 2-3 enemies with overlapping patrol routes
+- **Sprint/Stamina**: Hold SHIFT to sprint (1.8x speed) but stamina drains — when exhausted, you slow to 0.5x
+- **Decoys**: Press Z to drop a decoy that distracts nearby enemies for 3 seconds (3 per level)
+- **Teleporters**: Step on an orange or cyan portal to warp to its partner
 
 ## Controls
 
-- **Arrow Keys**: Move your character (up, down, left, right)
-- **Space Bar**: Change your shape to match the current hiding spot you're standing on
-- **Close Window**: Quit the game
+| Key | Action |
+|-----|--------|
+| **Arrow Keys** | Move (up, down, left, right) |
+| **SPACE** | Change shape at hiding spots |
+| **SHIFT** | Sprint (drains stamina) |
+| **Z** | Deploy decoy |
+| **ESC / Close** | Quit game |
+
+## Scoring System
+
+Your performance is scored at the end of all 5 levels:
+
+| Factor | Impact |
+|--------|--------|
+| **Time** | -15 points per second |
+| **Decoys Used** | -200 points per decoy |
+| **Deaths** | -1500 points per death |
+
+**Ranks**: S (8000+) > A (6000+) > B (4000+) > C (2000+) > D
+
+## Levels
+
+| # | Name | Enemies | Key Feature |
+|---|------|---------|-------------|
+| 1 | The Courtyard | 1 | Introduction — learn the basics |
+| 2 | The Gatehouse | 2 | Teleporters + wall corridors |
+| 3 | The Fortress | 2 | Inner/outer patrol routes |
+| 4 | The Labyrinth | 3 | Complex maze with narrow gaps |
+| 5 | The Gauntlet | 3 | Lane-based obstacle course |
 
 ## Requirements
 
@@ -67,29 +105,37 @@ Here are screenshots showing what you'll play in Camouflage:
 ## Installation
 
 1. Make sure you have Python installed on your system
-2. Install Pygame by running:
+2. Install Pygame:
    ```
    pip install pygame
    ```
 3. Run the game:
    ```
-   python camouflage.py
+   python main.py
    ```
 
-## Game Elements
+## Project Structure
 
-- **Player**: Black square or circle that you control
-- **Hiding Spots**: Black outlined squares and circles where you can change your shape
-- **Enemy**: Red triangular shape that patrols the area
-- **Vision Cone**: Red transparent area showing what the enemy can see
-- **Goal Zone**: Green rectangle - reach this to win the game
+```
+Total-White/
+├── main.py           # All game logic, classes, and levels
+├── README.md         # This file
+├── CONTRIBUTING.md   # Contribution guidelines
+├── LICENSE           # License information
+├── images/           # Game screenshots
+└── build/
+    ├── version.txt   # Pygbag version
+    └── web/          # Browser-deployable build
+```
 
 ## Tips
 
-- Always match your shape to the hiding spot before an enemy comes into view
-- Plan your route carefully to avoid being caught between patrol patterns
-- Use hiding spots strategically to break line of sight with enemies
-- The game ends if you're detected by an enemy while not properly hidden
+- Always match your shape to the hiding spot **before** an enemy comes into view
+- Plan your route through wall gaps to avoid dead ends
+- Sprint only when you have a clear path — getting exhausted near an enemy is dangerous
+- Save decoys for the hardest sections with overlapping patrol routes
+- Teleporters are great for escaping tight situations
+- Aim for **S Rank** — complete all levels quickly with zero deaths and no decoys!
 
 ## License
 
