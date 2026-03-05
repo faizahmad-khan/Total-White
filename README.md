@@ -118,7 +118,14 @@ Your performance is scored at the end of all 5 levels:
 
 ```
 Total-White/
-├── main.py           # All game logic, classes, and levels
+├── main.py           # Game loop and state management
+├── config.py         # Constants, colors, and screen settings
+├── player.py         # Player class (movement, sprint, drawing)
+├── enemy.py          # Enemy class (patrol AI, vision cone)
+├── entities.py       # Wall, Decoy, Teleporter, KeyItem, HidingSpot
+├── levels.py         # Level data and load_level() factory
+├── score.py          # ScoreTracker class (timing, ranking)
+├── ui.py             # Screen renderers (menu, HUD, transitions)
 ├── README.md         # This file
 ├── CONTRIBUTING.md   # Contribution guidelines
 ├── LICENSE           # License information
