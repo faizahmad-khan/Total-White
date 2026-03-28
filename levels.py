@@ -129,6 +129,44 @@ LEVELS = [
         ],
         "teleporters": [((50, 100), (750, 500)), ((50, 500), (750, 100))],
     },
+    {
+        "id": 6,
+        "name": "The Citadel",
+        "start": (60, 540),
+        "key_pos": (400, 300),
+        "goal": (740, 60),
+        "enemies": [
+            {
+                "path": [(120, 80), (680, 80), (680, 520), (120, 520)],
+                "speed": 4.0,
+            },
+            {
+                "path": [(260, 300), (400, 180), (540, 300), (400, 420)],
+                "speed": 4.2,
+            },
+            {"path": [(80, 460), (720, 460)], "speed": 3.6},
+            {"path": [(660, 120), (660, 520)], "speed": 3.8},
+        ],
+        "spots": [
+            (100, 120, "circle"), (100, 520, "square"),
+            (300, 120, "square"), (500, 120, "circle"),
+            (300, 520, "circle"), (500, 520, "square"),
+            (400, 320, "circle"), (700, 300, "square"),
+        ],
+        "walls": [
+            (180, 0, 14, 220),      # Left vertical top
+            (180, 320, 14, 280),    # Left vertical bottom
+            (380, 80, 14, 220),     # Center vertical top
+            (380, 380, 14, 220),    # Center vertical bottom
+            (580, 0, 14, 220),      # Right vertical top
+            (580, 320, 14, 200),    # Right vertical bottom
+            (240, 260, 120, 14),    # Mid-left horizontal
+            (420, 260, 120, 14),    # Mid-right horizontal
+            (240, 460, 120, 14),    # Lower-left horizontal
+            (420, 460, 120, 14),    # Lower-right horizontal
+        ],
+        "teleporters": [((60, 300), (740, 300)), ((60, 60), (740, 540))],
+    },
 ]
 
 
