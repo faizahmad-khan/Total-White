@@ -20,9 +20,9 @@ In Camouflage, you play as a stealth agent trying to reach the safe zone without
 
 ## Features
 
-- **5 Unique Levels** — Each with a distinct name, layout, and escalating difficulty
+- **6 Unique Levels** — Each with a distinct name, layout, and escalating difficulty
 - **Wall Obstacles** — Maze-like structures that block movement and force strategic routing
-- **Multiple Enemies Per Level** — Up to 3 guards patrolling simultaneously
+- **Multiple Enemies Per Level** — Up to 4 guards patrolling simultaneously
 - **Shape-Shifting Camouflage** — Morph into squares or circles to blend with hiding spots
 - **Sprint & Stamina System** — Burst of speed at the cost of energy
 - **Decoy Deployment** — Throw distractions to lure enemies away
@@ -60,7 +60,7 @@ In Camouflage, you play as a stealth agent trying to reach the safe zone without
 - **Patrol Patterns**: Enemies follow predetermined patrol paths and look in the direction they're moving
 - **Wall Collision**: Walls block both player movement, creating maze-like challenges
 - **Detection**: You'll be caught if you're moving in a vision cone OR not in a matching hiding spot
-- **Multiple Enemies**: Later levels feature 2-3 enemies with overlapping patrol routes
+- **Multiple Enemies**: Later levels feature 2-4 enemies with overlapping patrol routes
 - **Sprint/Stamina**: Hold SHIFT to sprint (1.8x speed) but stamina drains — when exhausted, you slow to 0.5x
 - **Decoys**: Press Z to drop a decoy that distracts nearby enemies for 3 seconds (3 per level)
 - **Teleporters**: Step on an orange or cyan portal to warp to its partner
@@ -77,7 +77,7 @@ In Camouflage, you play as a stealth agent trying to reach the safe zone without
 
 ## Scoring System
 
-Your performance is scored at the end of all 5 levels:
+Your performance is scored at the end of all 6 levels:
 
 | Factor | Impact |
 |--------|--------|
@@ -96,6 +96,7 @@ Your performance is scored at the end of all 5 levels:
 | 3 | The Fortress | 2 | Inner/outer patrol routes |
 | 4 | The Labyrinth | 3 | Complex maze with narrow gaps |
 | 5 | The Gauntlet | 3 | Lane-based obstacle course |
+| 6 | The Citadel | 4 | Multi-lane fortress with cross-map pressure |
 
 ## Requirements
 
