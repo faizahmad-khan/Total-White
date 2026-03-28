@@ -56,7 +56,7 @@ Update the README badge with your actual URL:
 - [ ] Game loads in browser
 - [ ] Arrow keys work
 - [ ] Game is playable (no console errors)
-- [ ] All 5 levels accessible
+- [ ] All 6 levels accessible
 - [ ] Scoring system works
 
 ## After Publishing
