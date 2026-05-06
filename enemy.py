@@ -4,7 +4,7 @@ import math
 
 import pygame
 
-from config import BLACK, ORANGE, RED, YELLOW, WIDTH, HEIGHT
+from config import BLACK, ORANGE, RED, YELLOW
 
 
 class Enemy:
@@ -95,24 +95,17 @@ class Enemy:
         return False
 
     def draw(self, surface):
-        """Render the enemy triangle and its vision cone lines."""
+        """Render the enemy triangle and its vision cone border lines."""
         color = YELLOW if (self.alerted or self.distracted) else RED
         angle_rad = math.radians(self.vision_angle)
         left_angle = math.radians(self.vision_angle + 35)
         right_angle = math.radians(self.vision_angle - 35)
 
-        # Vision cone (semi-transparent fill)
         p1 = (int(self.pos.x), int(self.pos.y))
         p2 = (int(self.pos.x + math.cos(left_angle) * self.vision_length),
               int(self.pos.y - math.sin(left_angle) * self.vision_length))
         p3 = (int(self.pos.x + math.cos(right_angle) * self.vision_length),
               int(self.pos.y - math.sin(right_angle) * self.vision_length))
-
-        # Draw filled vision cone (semi-transparent)
-        cone_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        cone_color = (255, 200, 0, 40) if self.alerted else (200, 50, 50, 30)
-        pygame.draw.polygon(cone_surface, cone_color, [p1, p2, p3])
-        surface.blit(cone_surface, (0, 0))
 
         # Vision border lines
         pygame.draw.line(surface, color, p1, p2, 2)
@@ -135,3 +128,17 @@ class Enemy:
             pygame.draw.circle(surface, ORANGE, (int(self.pos.x), int(self.pos.y - 30)), 6)
         elif self.alerted:
             pygame.draw.circle(surface, RED, (int(self.pos.x), int(self.pos.y - 30)), 6)
+
+    def draw_vision_cone(self, cone_surface):
+        """Render only the semi-transparent filled cone onto a shared overlay."""
+        left_angle = math.radians(self.vision_angle + 35)
+        right_angle = math.radians(self.vision_angle - 35)
+
+        p1 = (int(self.pos.x), int(self.pos.y))
+        p2 = (int(self.pos.x + math.cos(left_angle) * self.vision_length),
+              int(self.pos.y - math.sin(left_angle) * self.vision_length))
+        p3 = (int(self.pos.x + math.cos(right_angle) * self.vision_length),
+              int(self.pos.y - math.sin(right_angle) * self.vision_length))
+
+        cone_color = (255, 200, 0, 40) if self.alerted else (200, 50, 50, 30)
+        pygame.draw.polygon(cone_surface, cone_color, [p1, p2, p3])
