@@ -44,7 +44,7 @@ def draw_menu(screen, fonts):
 def draw_gameplay(screen, fonts, player, enemies, spots, teleporters,
                   key_item, active_decoys, walls, goal_rect, state):
     """Render the playing field (used for both PLAYING and GAME_OVER states)."""
-    font_big, font_med, font_small, font_tiny = fonts
+    font_big, _font_med, font_small, font_tiny = fonts
 
     # Draw walls first (background layer)
     for wall in walls:
@@ -71,6 +71,12 @@ def draw_gameplay(screen, fonts, player, enemies, spots, teleporters,
 
     for d in active_decoys:
         d.draw(screen)
+
+    # Draw all vision cone fills on one shared alpha surface to reduce allocations.
+    cone_overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    for enemy in enemies:
+        enemy.draw_vision_cone(cone_overlay)
+    screen.blit(cone_overlay, (0, 0))
 
     for enemy in enemies:
         enemy.draw(screen)
