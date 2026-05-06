@@ -11,7 +11,7 @@ echo ""
 # Check if pygbag is installed
 if ! python3 -c "import pygbag" 2>/dev/null; then
     echo "❌ pygbag not found. Installing..."
-    pip install --upgrade pygbag
+    python3 -m pip install --upgrade pygbag
     if [ $? -ne 0 ]; then
         echo "Failed to install pygbag"
         exit 1
