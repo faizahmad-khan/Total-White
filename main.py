@@ -170,6 +170,8 @@ async def main():
             pygame.display.flip()
             await asyncio.sleep(0)
 
+        pygame.quit()
+
     except Exception as e:
         print(f"CRASH CAUGHT: {e}")
         traceback.print_exc()
@@ -179,9 +181,20 @@ async def main():
         err_msg = font_small.render(str(e)[:60], True, WHITE)
         screen.blit(err_txt, (10, 10))
         screen.blit(err_msg, (10, 50))
+        hint_msg = font_small.render("Press ESC or close window to exit.", True, WHITE)
+        screen.blit(hint_msg, (10, 90))
         pygame.display.flip()
-        while True:
+
+        error_running = True
+        while error_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    error_running = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    error_running = False
             await asyncio.sleep(0)
+
+        pygame.quit()
 
 if __name__ == "__main__":
     asyncio.run(main())
