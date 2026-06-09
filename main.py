@@ -10,7 +10,10 @@ import pygame
 import asyncio
 import traceback
 
-from config import WIDTH, HEIGHT, FPS, WHITE, BLACK, RED
+from config import (
+    WIDTH, HEIGHT, FPS, WHITE, BLACK, RED,
+    COLLISION_DISTANCE, SAFE_SPOT_DISTANCE, TELEPORTER_COOLDOWN
+)
 from entities import Decoy
 from levels import LEVELS, load_level
 from score import ScoreTracker
@@ -113,10 +116,10 @@ async def main():
 
                     if player.rect.colliderect(t1.rect) and t1.cooldown == 0:
                         player.pos = pygame.math.Vector2(t2.rect.center)
-                        t2.cooldown = 60
+                        t2.cooldown = TELEPORTER_COOLDOWN
                     elif player.rect.colliderect(t2.rect) and t2.cooldown == 0:
                         player.pos = pygame.math.Vector2(t1.rect.center)
-                        t1.cooldown = 60
+                        t1.cooldown = TELEPORTER_COOLDOWN
 
                 if key_item.active and player.rect.colliderect(key_item.rect):
                     key_item.active = False
@@ -132,7 +135,7 @@ async def main():
                 safe_spot = False
                 for spot in spots:
                     dist = player.pos.distance_to(pygame.math.Vector2(spot.rect.center))
-                    if dist < 20 and player.shape_type == spot.shape_type:
+                    if dist < SAFE_SPOT_DISTANCE and player.shape_type == spot.shape_type:
                         safe_spot = True
 
                 for enemy in enemies:
@@ -145,7 +148,7 @@ async def main():
                     enemy.update(player.pos, active_decoys)
 
                     dist_to_enemy = player.pos.distance_to(enemy.pos)
-                    if dist_to_enemy < 25:
+                    if dist_to_enemy < COLLISION_DISTANCE:
                         state = "GAME_OVER"
 
             # --- DRAWING ---
