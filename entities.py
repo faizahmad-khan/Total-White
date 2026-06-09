@@ -2,7 +2,7 @@
 
 import pygame
 
-from config import BLACK, BLUE, DARK_GRAY, ORANGE
+from config import BLACK, BLUE, DARK_GRAY, ORANGE, DECOY_SIZE, DECOY_LIFETIME, TELEPORTER_COOLDOWN
 
 
 class Wall:
@@ -37,9 +37,9 @@ class Decoy:
 
     def __init__(self, x, y):
         self.pos = pygame.math.Vector2(x, y)
-        self.rect = pygame.Rect(0, 0, 30, 30)
+        self.rect = pygame.Rect(0, 0, DECOY_SIZE, DECOY_SIZE)
         self.rect.center = self.pos
-        self.life = 180  # Lasts 3 seconds (60fps * 3)
+        self.life = DECOY_LIFETIME
 
     def update(self):
         """Decrease remaining lifetime by one frame."""
