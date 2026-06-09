@@ -4,7 +4,10 @@ import math
 
 import pygame
 
-from config import BLACK, ORANGE, RED, YELLOW
+from config import (
+    BLACK, ORANGE, RED, YELLOW,
+    ENEMY_VISION_LENGTH, ENEMY_SPRINT_MULTIPLIER, ENEMY_DISTRACTION_RANGE, ENEMY_BASE_SPEED
+)
 
 
 class Enemy:
@@ -21,13 +24,15 @@ class Enemy:
         distracted: Whether the enemy is chasing a decoy.
     """
 
-    def __init__(self, patrol_points, speed=2.5):
+    def __init__(self, patrol_points, speed=None):
+        if speed is None:
+            speed = ENEMY_BASE_SPEED
         self.points = patrol_points
         self.current_point_index = 0
         self.pos = pygame.math.Vector2(self.points[0])
         self.base_speed = speed
         self.speed = speed
-        self.vision_length = 160
+        self.vision_length = ENEMY_VISION_LENGTH
         self.vision_angle = 0
         self.alerted = False
         self.distracted = False
@@ -46,7 +51,7 @@ class Enemy:
 
         for decoy in active_decoys:
             dist = self.pos.distance_to(decoy.pos)
-            if dist < 200:
+            if dist < ENEMY_DISTRACTION_RANGE:
                 self.distracted = True
                 self.target_decoy = decoy.pos
                 break
@@ -54,10 +59,10 @@ class Enemy:
         # 2. Determine Target
         if self.distracted:
             target = self.target_decoy
-            self.speed = self.base_speed * 1.5
+            self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER
         elif self.alerted:
             target = player_pos
-            self.speed = self.base_speed * 1.5
+            self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER
         else:
             target = pygame.math.Vector2(self.points[self.current_point_index])
             self.speed = self.base_speed
