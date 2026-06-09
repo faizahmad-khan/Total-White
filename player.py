@@ -2,7 +2,11 @@
 
 import pygame
 
-from config import BLACK, BLUE, GOLD, GRAY, RED, WIDTH, HEIGHT
+from config import (
+    BLACK, BLUE, GOLD, GRAY, RED, WIDTH, HEIGHT,
+    PLAYER_SIZE, PLAYER_BASE_SPEED, PLAYER_SPRINT_MULTIPLIER,
+    PLAYER_MAX_STAMINA, PLAYER_MAX_DECOYS
+)
 
 
 class Player:
@@ -21,20 +25,20 @@ class Player:
 
     def __init__(self, start_pos):
         self.pos = pygame.math.Vector2(start_pos)
-        self.rect = pygame.Rect(0, 0, 30, 30)
+        self.rect = pygame.Rect(0, 0, PLAYER_SIZE, PLAYER_SIZE)
         self.rect.center = self.pos
         self.shape_type = "square"
-        self.base_speed = 4
-        self.speed = 4
+        self.base_speed = PLAYER_BASE_SPEED
+        self.speed = PLAYER_BASE_SPEED
         self.has_key = False
 
         # Sprint System
-        self.stamina = 100
-        self.max_stamina = 100
+        self.stamina = PLAYER_MAX_STAMINA
+        self.max_stamina = PLAYER_MAX_STAMINA
         self.is_sprinting = False
 
         # Decoy System
-        self.decoys_left = 3
+        self.decoys_left = PLAYER_MAX_DECOYS
 
     def move(self, keys, walls=None):
         """Move the player based on pressed keys, respecting wall collisions.
@@ -56,7 +60,7 @@ class Player:
         if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
             if self.stamina > 0:
                 self.is_sprinting = True
-                self.speed = self.base_speed * 1.8
+                self.speed = self.base_speed * PLAYER_SPRINT_MULTIPLIER
                 self.stamina -= 1
             else:
                 self.is_sprinting = False
