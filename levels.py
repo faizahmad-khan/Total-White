@@ -288,6 +288,53 @@ LEVELS = [
             ((400, 300), (740, 300)), # Center panic-eject to start
         ],
     },
+      {
+        "id": 10,
+        "name": "The Reckoning",
+        # Final level: start center, key is hidden at a corner, goal at opposite corner
+        "start": (400, 300),
+        "key_pos": (60, 60),
+        "goal": (740, 540),
+        "enemies": [
+            # Outer sweep — very fast
+            {"path": [(60, 60), (740, 60), (740, 540), (60, 540)], "speed": 5.5},
+            # X-cross diagonal A
+            {"path": [(60, 60), (740, 540)], "speed": 5.0},
+            # X-cross diagonal B (opposite)
+            {"path": [(740, 60), (60, 540)], "speed": 5.0},
+            # Horizontal mid — cuts escape
+            {"path": [(60, 300), (740, 300)], "speed": 5.2},
+            # Vertical mid — cuts escape
+            {"path": [(400, 60), (400, 540)], "speed": 5.2},
+            # Tight guard on the goal
+            {"path": [(640, 440), (740, 440), (740, 540), (640, 540)], "speed": 4.8},
+        ],
+        "spots": [
+            (100, 100, "circle"),
+            (700, 100, "square"),
+            (100, 500, "square"),
+            (700, 500, "circle"),
+            (250, 300, "circle"),
+            (550, 300, "square"),
+        ],
+        "walls": [
+            (190, 0,   12, 220),   # Left vertical top
+            (190, 340, 12, 260),   # Left vertical bottom
+            (610, 0,   12, 220),   # Right vertical top
+            (610, 340, 12, 260),   # Right vertical bottom
+            (202, 240, 200, 12),   # Left horizontal mid
+            (400, 240, 200, 12),   # Right horizontal mid
+            (350, 80,  12, 120),   # Center-top cage left
+            (450, 80,  12, 120),   # Center-top cage right
+            (350, 400, 12, 120),   # Center-bottom cage left
+            (450, 400, 12, 120),   # Center-bottom cage right
+        ],
+        "teleporters": [
+            ((60, 300),  (740, 300)),  # Panic lateral
+            ((400, 60),  (400, 540)),  # Panic vertical — drops near goal
+            ((60, 540),  (740, 60)),   # Corner swap (high risk)
+        ],
+    },
 ]
 
 
