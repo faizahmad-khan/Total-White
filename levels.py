@@ -167,6 +167,44 @@ LEVELS = [
         ],
         "teleporters": [((60, 300), (740, 300)), ((60, 60), (740, 540))],
     },
+     {
+        "id": 7,
+        "name": "The Crossfire",
+        # Player starts bottom-left, key is top-right, goal is center
+        "start": (50, 550),
+        "key_pos": (730, 50),
+        "goal": (400, 300),
+        "enemies": [
+            # Horizontal sweeper, full width — blocks key approach
+            {"path": [(50, 100), (750, 100)], "speed": 4.5},
+            # Vertical sweeper, full height — cuts off center
+            {"path": [(400, 50), (400, 550)], "speed": 4.8},
+            # Diagonal-ish: top-left ↔ bottom-right cross
+            {"path": [(100, 150), (700, 450)], "speed": 4.2},
+            # Diagonal-ish: top-right ↔ bottom-left cross
+            {"path": [(700, 150), (100, 450)], "speed": 4.2},
+            # Tight center patrol — guards the goal directly
+            {"path": [(300, 250), (500, 250), (500, 350), (300, 350)], "speed": 5.0},
+        ],
+        "spots": [
+            (100, 80,  "circle"),
+            (700, 80,  "square"),
+            (100, 520, "square"),
+            (700, 520, "circle"),
+            (400, 420, "circle"),
+        ],
+        "walls": [
+            (240, 0,   12, 180),   # Left-center vertical top
+            (240, 300, 12, 300),   # Left-center vertical bottom
+            (560, 0,   12, 180),   # Right-center vertical top
+            (560, 300, 12, 300),   # Right-center vertical bottom
+            (260, 280, 290, 12),   # Center horizontal — forces detour
+        ],
+        "teleporters": [
+            ((50, 300), (750, 300)),   # Mid-left ↔ mid-right (risky shortcut)
+            ((50, 50),  (750, 550)),   # Corner swap
+        ],
+    },
 ]
 
 
