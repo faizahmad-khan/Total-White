@@ -205,6 +205,47 @@ LEVELS = [
             ((50, 50),  (750, 550)),   # Corner swap
         ],
     },
+     {
+        "id": 8,
+        "name": "The Gauntlet II",
+        # Start top-left, key bottom-center, goal top-right
+        "start": (50, 50),
+        "key_pos": (400, 530),
+        "goal": (740, 50),
+        "enemies": [
+            # Fast horizontal at mid-height — splits arena
+            {"path": [(50, 300), (750, 300)], "speed": 5.0},
+            # Vertical left lane
+            {"path": [(150, 50), (150, 550)], "speed": 4.5},
+            # Vertical right lane, opposite phase (starts bottom)
+            {"path": [(650, 550), (650, 50)], "speed": 4.5},
+            # Box patrol around the key
+            {"path": [(300, 430), (500, 430), (500, 570), (300, 570)], "speed": 4.8},
+            # Diagonal harasser through the center
+            {"path": [(200, 100), (600, 500), (200, 500), (600, 100)], "speed": 4.0},
+        ],
+        "spots": [
+            (80,  150, "circle"),
+            (720, 150, "square"),
+            (80,  450, "square"),
+            (720, 450, "circle"),
+            (400, 200, "circle"),
+        ],
+        "walls": [
+            (200, 0,   12, 240),   # Left vertical top
+            (200, 360, 12, 240),   # Left vertical bottom
+            (600, 0,   12, 240),   # Right vertical top
+            (600, 360, 12, 240),   # Right vertical bottom
+            (212, 260, 176, 12),   # Mid-left horizontal
+            (420, 260, 180, 12),   # Mid-right horizontal
+            (370, 390, 12, 120),   # Key cage left wall
+            (430, 390, 12, 120),   # Key cage right wall
+        ],
+        "teleporters": [
+            ((50, 550),  (750, 50)),   # Bottom-left ↔ top-right shortcut
+            ((400, 50),  (400, 300)),  # Top-center drops into danger zone
+        ],
+    },
 ]
 
 
