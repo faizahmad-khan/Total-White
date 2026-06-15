@@ -246,6 +246,48 @@ LEVELS = [
             ((400, 50),  (400, 300)),  # Top-center drops into danger zone
         ],
     },
+     {
+        "id": 9,
+        "name": "The Siege",
+        # Start right-center, key left-center, goal bottom-center
+        "start": (740, 300),
+        "key_pos": (60, 300),
+        "goal": (400, 560),
+        "enemies": [
+            # Outer perimeter patrol (clockwise)
+            {"path": [(80, 80), (720, 80), (720, 520), (80, 520)], "speed": 4.8},
+            # Inner perimeter patrol (counter-clockwise)
+            {"path": [(220, 180), (220, 420), (580, 420), (580, 180)], "speed": 4.5},
+            # Horizontal bisector — fast
+            {"path": [(80, 300), (720, 300)], "speed": 5.2},
+            # Vertical bisector — fast, opposite phase
+            {"path": [(400, 520), (400, 80)], "speed": 5.0},
+            # Small erratic patrol near key
+            {"path": [(80, 200), (200, 300), (80, 400)], "speed": 4.0},
+        ],
+        "spots": [
+            (120, 120, "square"),
+            (680, 120, "circle"),
+            (120, 480, "circle"),
+            (680, 480, "square"),
+            (400, 300, "square"),  # Center — most dangerous spot
+        ],
+        "walls": [
+            (170, 60,  12, 180),   # Inner-left top
+            (170, 360, 12, 180),   # Inner-left bottom
+            (620, 60,  12, 180),   # Inner-right top
+            (620, 360, 12, 180),   # Inner-right bottom
+            (182, 240, 140, 12),   # Left horizontal bridge
+            (480, 240, 140, 12),   # Right horizontal bridge
+            (360, 130, 12, 100),   # Center-top blocker
+            (360, 370, 12, 100),   # Center-bottom blocker
+        ],
+        "teleporters": [
+            ((740, 80),  (60, 520)),  # Top-right ↔ bottom-left
+            ((740, 520), (60, 80)),   # Bottom-right ↔ top-left
+            ((400, 300), (740, 300)), # Center panic-eject to start
+        ],
+    },
 ]
 
 
