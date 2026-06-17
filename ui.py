@@ -42,9 +42,13 @@ def draw_menu(screen, fonts):
 
 
 def draw_gameplay(screen, fonts, player, enemies, spots, teleporters,
-                  key_item, active_decoys, walls, goal_rect, state):
+                  key_item, active_decoys, walls, goal_rect, state,
+                  noise_points=None):
     """Render the playing field (used for both PLAYING and GAME_OVER states)."""
     font_big, _font_med, font_small, font_tiny = fonts
+
+    if noise_points is None:
+        noise_points = []
 
     # Draw walls first (background layer)
     for wall in walls:
@@ -80,6 +84,14 @@ def draw_gameplay(screen, fonts, player, enemies, spots, teleporters,
 
     for enemy in enemies:
         enemy.draw(screen)
+
+    if state == "PLAYING" or state == "GAME_OVER":
+        ping_surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+        for (np, nr, age) in noise_points:
+            alpha = max(0, 255 - age * 4)
+            pygame.draw.circle(ping_surface, (255, 200, 0, alpha // 6), (int(np.x), int(np.y)), int(nr))
+            pygame.draw.circle(ping_surface, (255, 165, 0, alpha // 3), (int(np.x), int(np.y)), int(nr * 0.7), 1)
+        screen.blit(ping_surface, (0, 0))
 
     if state == "PLAYING":
         player.draw(screen)
