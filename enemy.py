@@ -1,4 +1,4 @@
-"""Enemy guard with patrol AI and vision cone detection."""
+"""Enemy guard with patrol AI, vision cone detection, and noise reaction."""
 
 import math
 
@@ -6,7 +6,9 @@ import pygame
 
 from config import (
     BLACK, ORANGE, RED, YELLOW,
-    ENEMY_VISION_LENGTH, ENEMY_SPRINT_MULTIPLIER, ENEMY_DISTRACTION_RANGE, ENEMY_BASE_SPEED
+    ENEMY_VISION_LENGTH, ENEMY_SPRINT_MULTIPLIER, ENEMY_DISTRACTION_RANGE, ENEMY_BASE_SPEED,
+    NOISE_ENEMY_HEAR_RADIUS,
+    THREAT_MAX, THREAT_DECAY_RATE, THREAT_DETECTION_GAIN
 )
 
 
@@ -14,12 +16,12 @@ class Enemy:
     """A patrolling guard with a vision cone that detects the player.
 
     Enemies follow predefined patrol routes. They can be distracted
-    by decoys and will chase the player when alerted.
+    by decoys, triggered by noise, and will chase the player when alerted.
 
     Attributes:
-        points: List of patrol waypoints.
-        speed: Current movement speed.
-        vision_length: Range of the vision cone in pixels.
+        state: One of ('PATROL', 'INVESTIGATE', 'ALERT', 'DISTRACTED').
+        threat: 0..THREAT_MAX noise suspicion level.
+        noise_target: Position the enemy heard noise from.
         alerted: Whether the enemy is actively chasing the player.
         distracted: Whether the enemy is chasing a decoy.
     """
@@ -34,44 +36,106 @@ class Enemy:
         self.speed = speed
         self.vision_length = ENEMY_VISION_LENGTH
         self.vision_angle = 0
+        self.state = "PATROL"
         self.alerted = False
         self.distracted = False
         self.target_decoy = None
+        self.threat = 0
+        self.noise_target = None
 
-    def update(self, player_pos, active_decoys):
-        """Update enemy position, chasing decoys/player or patrolling.
+    def update(self, player_pos, active_decoys, noise_points=None):
+        """Update enemy state and movement.
 
         Args:
             player_pos: Current player position as Vector2.
             active_decoys: List of active Decoy objects on the map.
+            noise_points: Optional list of (Vector2, radius) noise sources.
         """
-        # 1. Check for Decoys
-        self.distracted = False
-        self.target_decoy = None
+        is_distracted = False
+        target_decoy_pos = None
 
         for decoy in active_decoys:
             dist = self.pos.distance_to(decoy.pos)
             if dist < ENEMY_DISTRACTION_RANGE:
-                self.distracted = True
-                self.target_decoy = decoy.pos
+                is_distracted = True
+                target_decoy_pos = decoy.pos
                 break
 
-        # 2. Determine Target
-        if self.distracted:
-            target = self.target_decoy
-            self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER
+        nearest_noise_target = None
+        nearest_noise_dist = 999999
+        if noise_points:
+            for (np, nr) in noise_points:
+                d = self.pos.distance_to(np)
+                if d < nr + NOISE_ENEMY_HEAR_RADIUS and d < nearest_noise_dist:
+                    nearest_noise_dist = d
+                    nearest_noise_target = np
+
+        if is_distracted:
+            self.state = "DISTRACTED"
+            self.target_decoy = target_decoy_pos
+            self.distracted = True
+            self.noise_target = None
+            self.threat = 0
+            self.alerted = False
+        elif nearest_noise_target and self.threat > 0:
+            dist_to_noise = self.pos.distance_to(nearest_noise_target)
+            if dist_to_noise < 10:
+                self.noise_target = None
+                self.threat -= 20
+                if self.threat < 0:
+                    self.threat = 0
+            else:
+                self.noise_target = nearest_noise_target
+            if self.can_see(player_pos):
+                if dist_to_noise > ENEMY_VISION_LENGTH + 120:
+                    self.state = "ALERT"
+                    self.alerted = True
+                    target = player_pos
+                    self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER
+                else:
+                    self.state = "INVESTIGATE"
+                    if self.threat > 40:
+                        self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER * 0.85
+                    else:
+                        self.speed = self.base_speed * 1.25
+                    target = self.noise_target
+            else:
+                self.state = "INVESTIGATE"
+                if self.threat > 40:
+                    self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER * 0.85
+                else:
+                    self.speed = self.base_speed * 1.25
+                target = self.noise_target
+        elif nearest_noise_target and self.threat <= 0:
+            self.noise_target = nearest_noise_target
+            self.threat += 25
+            self.state = "INVESTIGATE"
+            if self.threat > 40:
+                self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER * 0.85
+            else:
+                self.speed = self.base_speed * 1.25
+            target = self.noise_target
         elif self.alerted:
+            self.state = "ALERT"
+            self.noise_target = None
             target = player_pos
             self.speed = self.base_speed * ENEMY_SPRINT_MULTIPLIER
         else:
+            self.state = "PATROL"
+            self.alerted = False
+            self.noise_target = None
             target = pygame.math.Vector2(self.points[self.current_point_index])
             self.speed = self.base_speed
 
-        # 3. Move
+        if self.threat > 0 and not nearest_noise_target:
+            self.threat -= THREAT_DECAY_RATE
+            if self.threat < 0:
+                self.threat = 0
+
         direction = target - self.pos
         dist = direction.length()
 
-        if not self.alerted and not self.distracted and dist < 5:
+        if self.state == "PATROL" and dist < 5:
             self.current_point_index = (self.current_point_index + 1) % len(self.points)
         elif dist > 1:
             direction = direction.normalize()
@@ -101,7 +165,7 @@ class Enemy:
 
     def draw(self, surface):
         """Render the enemy triangle and its vision cone border lines."""
-        color = YELLOW if (self.alerted or self.distracted) else RED
+        color = YELLOW if (self.alerted or self.distracted or self.state == "INVESTIGATE") else RED
         angle_rad = math.radians(self.vision_angle)
         left_angle = math.radians(self.vision_angle + 35)
         right_angle = math.radians(self.vision_angle - 35)
@@ -112,12 +176,10 @@ class Enemy:
         p3 = (int(self.pos.x + math.cos(right_angle) * self.vision_length),
               int(self.pos.y - math.sin(right_angle) * self.vision_length))
 
-        # Vision border lines
         pygame.draw.line(surface, color, p1, p2, 2)
         pygame.draw.line(surface, color, p1, p3, 2)
         pygame.draw.line(surface, color, p2, p3, 1)
 
-        # Body triangle
         tip = (int(self.pos.x + math.cos(angle_rad) * 20),
                int(self.pos.y - math.sin(angle_rad) * 20))
         left = (int(self.pos.x + math.cos(angle_rad + 2.5) * 15),
@@ -128,11 +190,22 @@ class Enemy:
         pygame.draw.polygon(surface, RED, [tip, left, right])
         pygame.draw.polygon(surface, BLACK, [tip, left, right], 1)
 
-        # "!" if distracted or alerted
         if self.distracted:
             pygame.draw.circle(surface, ORANGE, (int(self.pos.x), int(self.pos.y - 30)), 6)
-        elif self.alerted:
+        elif self.alerted or self.state == "ALERT":
             pygame.draw.circle(surface, RED, (int(self.pos.x), int(self.pos.y - 30)), 6)
+        elif self.state == "INVESTIGATE":
+            pygame.draw.circle(surface, YELLOW, (int(self.pos.x), int(self.pos.y - 30)), 6)
+            pygame.draw.circle(surface, BLACK, (int(self.pos.x), int(self.pos.y - 30)), 6, 1)
+
+        if self.state in ("INVESTIGATE", "ALERT"):
+            bar_width = 40
+            fill = min(1.0, self.threat / THREAT_MAX) * bar_width
+            pygame.draw.rect(surface, DARK_GRAY if 'DARK_GRAY' in globals() else (80, 80, 80),
+                             (self.pos.x - bar_width // 2, self.pos.y - 40, bar_width, 4))
+            bar_color = YELLOW if self.state == "INVESTIGATE" else RED
+            pygame.draw.rect(surface, bar_color,
+                             (self.pos.x - bar_width // 2, self.pos.y - 40, fill, 4))
 
     def draw_vision_cone(self, cone_surface):
         """Render only the semi-transparent filled cone onto a shared overlay."""
@@ -145,5 +218,6 @@ class Enemy:
         p3 = (int(self.pos.x + math.cos(right_angle) * self.vision_length),
               int(self.pos.y - math.sin(right_angle) * self.vision_length))
 
-        cone_color = (255, 200, 0, 40) if self.alerted else (200, 50, 50, 30)
+        alpha = 55 if self.alerted or self.state == "ALERT" else 35
+        cone_color = (255, 200, 0, alpha) if self.alerted or self.state == "INVESTIGATE" else (200, 50, 50, 30)
         pygame.draw.polygon(cone_surface, cone_color, [p1, p2, p3])
