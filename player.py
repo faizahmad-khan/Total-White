@@ -5,7 +5,8 @@ import pygame
 from config import (
     BLACK, BLUE, GOLD, GRAY, RED, WIDTH, HEIGHT,
     PLAYER_SIZE, PLAYER_BASE_SPEED, PLAYER_SPRINT_MULTIPLIER,
-    PLAYER_MAX_STAMINA, PLAYER_MAX_DECOYS
+    PLAYER_MAX_STAMINA, PLAYER_MAX_DECOYS,
+    NOISE_MOVE_RADIUS, NOISE_SPRINT_RADIUS, NOISE_SPRINT_INTERVAL
 )
 
 
@@ -39,6 +40,7 @@ class Player:
 
         # Decoy System
         self.decoys_left = PLAYER_MAX_DECOYS
+        self.movement_tick = 0
 
     def move(self, keys, walls=None):
         """Move the player based on pressed keys, respecting wall collisions.
@@ -119,3 +121,18 @@ class Player:
         # Key indicator
         if self.has_key:
             pygame.draw.circle(surface, GOLD, (int(self.pos.x), int(self.pos.y - 32)), 4)
+
+    def get_noise(self, is_moving):
+        radius = 0
+        emitted = False
+        if is_moving:
+            self.movement_tick += 1
+            if self.is_sprinting:
+                radius = NOISE_SPRINT_RADIUS
+                if self.movement_tick >= NOISE_SPRINT_INTERVAL:
+                    emitted = True
+                    self.movement_tick = 0
+            else:
+                radius = NOISE_MOVE_RADIUS
+                emitted = True
+        return radius, emitted
